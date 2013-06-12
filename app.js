@@ -11,9 +11,9 @@ var auth = {
   , account: '000000000000' 
   , topic: 'Queue-Overloaded'
 }
-var client = SNSClient(auth, function(err, message) {
-    console.log(message);
-});
+//var client = SNSClient(auth, function(err, message) {
+//    console.log(message);
+//});
 
 
 // Configuration

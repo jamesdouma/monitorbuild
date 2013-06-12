@@ -12,6 +12,8 @@
     },
     "scripts": {
         "start": "node ./app.js",
+        "worker": "node ./worker.js",
+        "clock": "node ./clock.js",
         "test": "open ./public/spec.html"
     }
 }

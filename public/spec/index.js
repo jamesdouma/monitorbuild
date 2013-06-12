@@ -62,33 +62,20 @@ describe('app', function() {
 
     describe('hasWarnings', function() {
         it('should be false when there are no warnings', function() {
-            spyOn(app, 'hasRipplez').andReturn(true);
             spyOn(app, 'isBrowserSupported').andReturn(true);
             expect(app.hasWarnings()).toEqual(false);
         });
 
-        it('should be true when missing Ripple', function() {
-            spyOn(app, 'hasRipplez').andReturn(false);
-            spyOn(app, 'isBrowserSupported').andReturn(true);
-            expect(app.hasWarnings()).toEqual(true);
-        });
 
         it('should be true when missing Chrome', function() {
-            spyOn(app, 'hasRipplez').andReturn(true);
             spyOn(app, 'isBrowserSupported').andReturn(false);
             expect(app.hasWarnings()).toEqual(true);
         });
 
-        it('should be true when missing Ripple and Chrome', function() {
-            spyOn(app, 'hasRipplez').andReturn(false);
-            spyOn(app, 'isBrowserSupported').andReturn(false);
-            expect(app.hasWarnings()).toEqual(true);
-        });
     });
 
     describe('loadWarnings', function() {
         it('should show no warnings when dependencies exist', function() {
-            spyOn(app, 'hasRipplez').andReturn(true);
             spyOn(app, 'isBrowserSupported').andReturn(true);
             spyOn(app, 'show');
             app.loadWarnings();
@@ -96,20 +83,12 @@ describe('app', function() {
         });
 
         it('should show browser warning', function() {
-            spyOn(app, 'hasRipplez').andReturn(true);
             spyOn(app, 'isBrowserSupported').andReturn(false);
             spyOn(app, 'show');
             app.loadWarnings();
             expect(app.show).toHaveBeenCalledWith('browser-warning');
         });
 
-        it('should show Ripple warning', function() {
-            spyOn(app, 'hasRipplez').andReturn(false);
-            spyOn(app, 'isBrowserSupported').andReturn(true);
-            spyOn(app, 'show');
-            app.loadWarnings();
-            expect(app.show).toHaveBeenCalledWith('ripple-warning');
-        });
     });
 
     describe('isBrowserSupported', function() {
@@ -130,19 +109,6 @@ describe('app', function() {
         });
     });
 
-    describe('hasRipplez', function() {
-        it('should be true when Ripple is installed', function() {
-            helper.id('stage').innerHTML = '<script id="tinyhippos-injected"></script>';
-            expect(app.hasRipplez()).toBe(true);
-        });
-
-        it('should be false when Ripple is missing', function() {
-            var el = helper.id('tinyhippos-injected');
-            helper.remove('tinyhippos-injected');
-            expect(app.hasRipplez()).toBe(false);
-            if (el) document.body.appendChild(el);
-        });
-    });
 
     describe('hasApiRequest', function() {
         it('should be false when qs is empty', function() {
@@ -203,29 +169,7 @@ describe('app', function() {
         });
 
         describe('platform parameter', function() {
-            it('should be renamed to "enableripple"', function() {
-                spyOn(app, 'redirect');
-                app.goto('http://cordova.io?platform=cordova');
-                expect(app.redirect).toHaveBeenCalledWith('http://cordova.io?enableripple=cordova');
-            });
 
-            it('should be appended as "?enableripple" when no params exist', function() {
-                spyOn(app, 'redirect');
-                app.goto('http://cordova.io');
-                expect(app.redirect).toHaveBeenCalledWith('http://cordova.io?enableripple=cordova');
-            });
-
-            it('should be appended as "&enableripple" when params exist', function() {
-                spyOn(app, 'redirect');
-                app.goto('http://cordova.io?q=s');
-                expect(app.redirect).toHaveBeenCalledWith('http://cordova.io?q=s&enableripple=cordova');
-            });
-
-            it('should support the format platform=<name>-<version>', function() {
-                spyOn(app, 'redirect');
-                app.goto('http://cordova.io?platform=cordova-2.0.0');
-                expect(app.redirect).toHaveBeenCalledWith('http://cordova.io?enableripple=cordova-2.0.0');
-            });
         });
 
         describe('protocol', function() {
@@ -248,25 +192,6 @@ describe('app', function() {
             });
         });
 
-        describe('enableripple parameter', function() {
-            it('should add "?enableripple=cordova" if missing', function() {
-                spyOn(app, 'redirect');
-                app.goto('http://cordova.io');
-                expect(app.redirect).toHaveBeenCalledWith('http://cordova.io?enableripple=cordova');
-            });
-
-            it('should add "&enableripple=cordova" if missing', function() {
-                spyOn(app, 'redirect');
-                app.goto('http://cordova.io?q=s');
-                expect(app.redirect).toHaveBeenCalledWith('http://cordova.io?q=s&enableripple=cordova');
-            });
-
-            it('should preserve "enableripple=cordova" if available', function() {
-                spyOn(app, 'redirect');
-                app.goto('http://cordova.io?enableripple=cordova');
-                expect(app.redirect).toHaveBeenCalledWith('http://cordova.io?enableripple=cordova');
-            });
-        });
     });
 
     describe('showLoading', function() {

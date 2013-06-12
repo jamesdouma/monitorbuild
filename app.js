@@ -29,10 +29,6 @@ app.get('/', function (req, res) {
     res.sendfile(__dirname + '/public/index.html');
 });
 
-app.get('/aws-snsclient', function (req, res) {
-    res.sendfile(__dirname + '/public/index.html');
-});
-
 app.post('/aws-snsclient', function(req, res) {
   /*
   {

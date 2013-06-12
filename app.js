@@ -1,8 +1,8 @@
 var express = require('express'), 
     fs = require('fs');
 
-var aws = require('aws-sdk'), 
-    SNSClient = require('aws-snsclient');
+//var aws = require('aws-sdk'), 
+//    SNSClient = require('aws-snsclient');
 
 var app = module.exports = express.createServer();
 

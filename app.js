@@ -1,5 +1,7 @@
-var express = require('express'), 
+var express = require('express'),
+	url = require('url'), 
     fs = require('fs');
+
 
 //var aws = require('aws-sdk'), 
 //    SNSClient = require('aws-snsclient');

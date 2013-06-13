@@ -79,6 +79,8 @@ app.post('/aws-snsclient', function(req, res) {
 	    } else {
 	    	console.log("could not parse" + data);
 	    }
+	res.send([{name:'alarm1'}, {name:'alarm2'}]);
+    res.end()
 
     });
 
@@ -98,8 +100,6 @@ app.post('/aws-snsclient', function(req, res) {
     console.log( obj );
 
 */
-	res.send([{name:'alarm1'}, {name:'alarm2'}]);
-    res.end()
 
 });
 

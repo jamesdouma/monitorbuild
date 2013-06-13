@@ -55,7 +55,7 @@ app.post('/aws-snsclient', function(req, res) {
     var obj = null;
     req.addListener('data', function(chunk) { console.log("chunk:"+chunk); data += chunk; });
     req.addListener('end', function() {
-        console.write( "data:"+data );
+        console.log( "data:"+data );
         obj = JSON.parse( data )
         response.writeHead(200, {'content-type': 'text/plain' });
         response.end()
@@ -75,8 +75,25 @@ app.post('/aws-snsclient', function(req, res) {
 
     // as the object is created, the live below will print "bar"
     console.log( obj );
+
 */
-    res.send([{name:'alarm1'}, {name:'alarm2'}]);
+	res.send([{name:'alarm1'}, {name:'alarm2'}]);
+
+	var url = obj.SubscribeURL;
+	var urlhost = url.substring(url,0,url.indexOf("/");
+	var urlpath = url.substring(url,url.indexOf("/"));
+	
+	var options = {
+	  host: urlhost,
+	  port: 80,
+	  path: urlpath
+	};
+
+	http.get(options, function(res) {
+	  console.log("Got response: " + res.statusCode);
+	}).on('error', function(e) {
+	  console.log("Got error: " + e.message);
+	});
 });
 
 app.get('/aws-snsclient/:id', function(req, res) {

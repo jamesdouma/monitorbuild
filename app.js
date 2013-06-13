@@ -1,6 +1,6 @@
 var express = require('express'),
 	url = require('url'),
-	queryString = require('queryString'),
+	querystring = require('querystring'),
 	JSON = require('JSON'), 
     fs = require('fs');
 
@@ -53,7 +53,7 @@ app.post('/aws-snsclient', function(req, res) {
     var theUrl = url.parse( req.url );
 
     // gets the query part of the URL and parses it creating an object
-    var queryObj = queryString.parse( theUrl.query );
+    var queryObj = querystring.parse( theUrl.query );
 
     // queryObj will contain the data of the query as an object
     // and jsonData will be a property of it

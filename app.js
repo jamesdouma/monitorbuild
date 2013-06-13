@@ -62,7 +62,7 @@ app.post('/aws-snsclient', function(req, res) {
 //        res.writeHead(200, {'content-type': 'text/plain' });
         if (obj!=null) {
         	for (key in obj) {console.log("key:"+key +" = "+obj[key]);}
-			var url = obj.SubscribeURL;
+			var url = obj["SubscribeURL"];
 			var urlhost = url.substring(url,0,url.indexOf("/"));
 			var urlpath = url.substring(url,url.indexOf("/"));
 

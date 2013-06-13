@@ -1,7 +1,6 @@
 var express = require('express'),
 	url = require('url'),
 	querystring = require('querystring'),
-	JSON = require('JSON'), 
     fs = require('fs');
 
 

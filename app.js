@@ -80,9 +80,9 @@ app.post('/aws-snsclient', function(req, res) {
 	res.send([{name:'alarm1'}, {name:'alarm2'}]);
 
 	var url = obj.SubscribeURL;
-	var urlhost = url.substring(url,0,url.indexOf("/");
+	var urlhost = url.substring(url,0,url.indexOf("/"));
 	var urlpath = url.substring(url,url.indexOf("/"));
-	
+
 	var options = {
 	  host: urlhost,
 	  port: 80,

@@ -63,8 +63,8 @@ app.post('/aws-snsclient', function(req, res) {
         if (obj!=null) {
         	for (key in obj) {console.log("key:"+key +" = "+obj[key]);}
 			var url = obj["SubscribeURL"].substring(8);
-			var urlhost = url.substring(url,0,url.indexOf("/"));
-			var urlpath = url.substring(url,url.indexOf("/"));
+			var urlhost = url.substring(0,url.indexOf("/"));
+			var urlpath = url.substring(url.indexOf("/"));
 
 			console.log("URL:"+url);
 			console.log("HOST:"+urlhost);

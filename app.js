@@ -33,6 +33,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/aws-snsclient', function(req, res) {
+	console.log("Processing AWS SNS POST");
   /*
   {
   "Type" : "SubscriptionConfirmation",

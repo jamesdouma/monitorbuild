@@ -66,6 +66,9 @@ app.post('/aws-snsclient', function(req, res) {
 			var urlhost = url.substring(url,0,url.indexOf("/"));
 			var urlpath = url.substring(url,url.indexOf("/"));
 
+			console.log("HOST:"+urlhost);
+			console.log("PATH:"+urlpath);
+
 			var options = {
 			  host: urlhost,
 			  port: 80,

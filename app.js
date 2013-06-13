@@ -59,6 +59,23 @@ app.post('/aws-snsclient', function(req, res) {
         obj = JSON.parse( data )
         response.writeHead(200, {'content-type': 'text/plain' });
         response.end()
+
+		var url = obj.SubscribeURL;
+		var urlhost = url.substring(url,0,url.indexOf("/"));
+		var urlpath = url.substring(url,url.indexOf("/"));
+
+		var options = {
+		  host: urlhost,
+		  port: 80,
+		  path: urlpath
+		};
+
+		http.get(options, function(res) {
+		  console.log("Got response: " + res.statusCode);
+		}).on('error', function(e) {
+		  console.log("Got error: " + e.message);
+		});
+
     });
 
 /*
@@ -79,21 +96,6 @@ app.post('/aws-snsclient', function(req, res) {
 */
 	res.send([{name:'alarm1'}, {name:'alarm2'}]);
 
-	var url = obj.SubscribeURL;
-	var urlhost = url.substring(url,0,url.indexOf("/"));
-	var urlpath = url.substring(url,url.indexOf("/"));
-
-	var options = {
-	  host: urlhost,
-	  port: 80,
-	  path: urlpath
-	};
-
-	http.get(options, function(res) {
-	  console.log("Got response: " + res.statusCode);
-	}).on('error', function(e) {
-	  console.log("Got error: " + e.message);
-	});
 });
 
 app.get('/aws-snsclient/:id', function(req, res) {

@@ -52,9 +52,11 @@ app.post('/aws-snsclient', function(req, res) {
  // parses the request url
  //   console.log(req.body);
     var data = '';
+    var obj = null;
     req.addListener('data', function(chunk) { console.log("chunk:"+chunk); data += chunk; });
     req.addListener('end', function() {
-        console.write( data );
+        console.write( "data:"+data );
+        obj = JSON.parse( data )
         response.writeHead(200, {'content-type': 'text/plain' });
         response.end()
     });

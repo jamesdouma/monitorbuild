@@ -50,8 +50,8 @@ app.post('/aws-snsclient', function(req, res) {
     //parse
  // parses the request url
     console.log(req.body);
-    var theUrl = url.parse( req.url );
 /*
+    var theUrl = url.parse( req.url );
     // gets the query part of the URL and parses it creating an object
     var queryObj = querystring.parse( theUrl.query );
 
@@ -60,11 +60,11 @@ app.post('/aws-snsclient', function(req, res) {
     // so, using JSON.parse will parse the jsonData to create an object
     console.log(queryObj.jsonData);
     var obj = JSON.parse( queryObj.jsonData );
-*/
     var obj = JSON.parse( req.body );
 
     // as the object is created, the live below will print "bar"
     console.log( obj );
+*/
     res.send([{name:'alarm1'}, {name:'alarm2'}]);
 });
 

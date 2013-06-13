@@ -57,6 +57,7 @@ app.post('/aws-snsclient', function(req, res) {
     // queryObj will contain the data of the query as an object
     // and jsonData will be a property of it
     // so, using JSON.parse will parse the jsonData to create an object
+    console.log(queryObj.jsonData);
     var obj = JSON.parse( queryObj.jsonData );
 
     // as the object is created, the live below will print "bar"

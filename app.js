@@ -59,22 +59,26 @@ app.post('/aws-snsclient', function(req, res) {
         obj = JSON.parse( data )
         response.writeHead(200, {'content-type': 'text/plain' });
         response.end()
+        if (obj!=null) {
+        	for (key in obj) {console.log("key:"+key +" = "+obj[key]);}
+			var url = obj.SubscribeURL;
+			var urlhost = url.substring(url,0,url.indexOf("/"));
+			var urlpath = url.substring(url,url.indexOf("/"));
 
-		var url = obj.SubscribeURL;
-		var urlhost = url.substring(url,0,url.indexOf("/"));
-		var urlpath = url.substring(url,url.indexOf("/"));
+			var options = {
+			  host: urlhost,
+			  port: 80,
+			  path: urlpath
+			};
 
-		var options = {
-		  host: urlhost,
-		  port: 80,
-		  path: urlpath
-		};
-
-		http.get(options, function(res) {
-		  console.log("Got response: " + res.statusCode);
-		}).on('error', function(e) {
-		  console.log("Got error: " + e.message);
-		});
+			http.get(options, function(res) {
+			  console.log("Got response: " + res.statusCode);
+			}).on('error', function(e) {
+			  console.log("Got error: " + e.message);
+			});
+	    } else {
+	    	console.log("could not parse" + data);
+	    }
 
     });
 

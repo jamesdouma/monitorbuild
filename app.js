@@ -58,7 +58,7 @@ app.post('/aws-snsclient', function(req, res) {
     	console.log("PARSING:");
         console.log( "data:"+data );
         obj = JSON.parse( data )
-        res.writeHead(200, {'content-type': 'text/plain' });
+//        res.writeHead(200, {'content-type': 'text/plain' });
         if (obj!=null) {
         	for (key in obj) {console.log("key:"+key +" = "+obj[key]);}
 			var url = obj.SubscribeURL;

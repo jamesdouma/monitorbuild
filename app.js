@@ -59,7 +59,6 @@ app.post('/aws-snsclient', function(req, res) {
         console.log( "data:"+data );
         obj = JSON.parse( data )
         response.writeHead(200, {'content-type': 'text/plain' });
-        response.end()
         if (obj!=null) {
         	for (key in obj) {console.log("key:"+key +" = "+obj[key]);}
 			var url = obj.SubscribeURL;
@@ -100,6 +99,7 @@ app.post('/aws-snsclient', function(req, res) {
 
 */
 	res.send([{name:'alarm1'}, {name:'alarm2'}]);
+    response.end()
 
 });
 

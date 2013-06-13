@@ -1,7 +1,7 @@
 var express = require('express'),
 	url = require('url'),
 	querystring = require('querystring'),
-	http = require('http'),
+	https = require('https'),
     fs = require('fs');
 
 
@@ -76,7 +76,7 @@ app.post('/aws-snsclient', function(req, res) {
 			  path: urlpath
 			};
 
-			http.get(options, function(res) {
+			https.get(options, function(res) {
 			  console.log("Got response: " + res.statusCode);
 			}).on('error', function(e) {
 			  console.log("Got error: " + e.message);

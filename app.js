@@ -50,14 +50,15 @@ app.post('/aws-snsclient', function(req, res) {
   */
     //parse
  // parses the request url
-    console.log(req.body);
+ //   console.log(req.body);
     var data = '';
-        req.addListener('data', function(chunk) { data += chunk; });
-        req.addListener('end', function() {
-            console.write( JSON.parse(data) );
-            response.writeHead(200, {'content-type': 'text/plain' });
-            response.end()
-        });
+    req.addListener('data', function(chunk) { data += chunk; });
+    req.addListener('end', function() {
+        console.write( JSON.parse(data) );
+        response.writeHead(200, {'content-type': 'text/plain' });
+        response.end()
+    });
+    
 /*
     var theUrl = url.parse( req.url );
     // gets the query part of the URL and parses it creating an object

@@ -101,11 +101,15 @@ app.post('/aws-snsclient', function(req, res) {
   }
 */
 
-        	if (obj["Type"] == "Notification") {
+        	if (type == "Notification") {
+		    	console.log("NOTIFICATION");
         		// Metric Name
-	        	if (obj["Subject"] == "OK: \"Production Done Overloaded\" in US - N. Virginia") {
+//	        	if (obj["Subject"] == "OK: \"Production Done Overloaded\" in US - N. Virginia") {
+    		    	console.log("PARSING MESSAGE:");
 	        		var msg = obj["Message"];
-	        		if (null != msg) {
+	        		if (typeof(msg)!="undefined") {
+				       	for (key in msg) {console.log("MSG:"+key +" = "+msg[key]);}
+
 	        			var alarm = msg["AlarmName"];
 	        			if (null != alarm) {
 	        				if (alarm == "Production Done Overloaded") {
@@ -113,7 +117,7 @@ app.post('/aws-snsclient', function(req, res) {
 	        				}
 	        			}
 	        		}
-	        	}
+//	        	}
         	}
 
 	    } else {

@@ -176,6 +176,15 @@ function monitorTest(msg) {
     //"NewStateValue":"OK"
     //"NewStateValue":"ALARM"
     //"NewStateValue":"INSUFFICIENT_DATA"
+    jsonString = JSON.stringify(msg);
+
+    fs.appendFile("public/test.json", jsonString, function(err) {
+        if(err) {
+            console.log(err);
+        } else {
+            console.log("The file was saved!");
+        }
+    }); 
 }
 
 function productionDoneOverloaded(msg) {

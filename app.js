@@ -3,7 +3,7 @@ var express = require('express'),
 	querystring = require('querystring'),
 	https = require('https'),
     fs = require('fs');
-
+var redis = require("redis").createClient();
 
 //var aws = require('aws-sdk'), 
 //    SNSClient = require('aws-snsclient');
@@ -132,7 +132,7 @@ function handleNotification(obj) {
 			//Production Done Overloaded
 			//Error Queue Overloaded
 			if (alarm == "Monitor-Test") {
-
+				monitorTest(msg);
 			}
 			if (alarm == "Production Done Overloaded") {
 
@@ -143,10 +143,52 @@ function handleNotification(obj) {
 			if (alarm == "Ios Queue Overloaded") {
 
 			}
+			if (alarm == "Android Queue Overloaded") {
+
+			}
+			if (alarm == "BB Widget Queue Overloaded") {
+
+			}
+			if (alarm == "NumberOfMessagesReceived BB-Widget") {
+
+			}
+			if (alarm == "Symbian Queue Overloaded") {
+
+			}
+			if (alarm == "Winphone Queue Overloaded") {
+
+			}
+			if (alarm == "WebOS Queue Overloaded") {
+
+			}
+			if (alarm == "Unhealthy Hosts") {
+
+			}
+			if (alarm == "okapi-production-4 High-Status-Check-Failed-Any") {
+
+			}
 		}
 	}
 }
 
+function monitorTest(msg) {
+    console.log("MONITOR TEST:");
+    //"NewStateValue":"OK"
+    //"NewStateValue":"ALARM"
+    //"NewStateValue":"INSUFFICIENT_DATA"
+}
+
+function productionDoneOverloaded(msg) {
+	
+}
+
+function errorQueueOverloaded(msg) {
+	
+}
+
+function IosQueueOverloaded(msg) {
+	
+}
 
 /*
 {
@@ -163,49 +205,6 @@ function handleNotification(obj) {
   }
 */
 
-/*
-{
-    "Timestamp": "2013-06-10T15:56:21.411Z",
-    "HistoryItemType": "StateUpdate",
-    "AlarmName": "Ios Queue Overloaded",
-    "HistoryData": {
-        "version": "1.0",
-        "oldState": {
-            "stateValue": "OK",
-            "stateReason": "Threshold Crossed: 1 datapoint (30.0) was not greater than or equal to the threshold (50.0).",
-            "stateReasonData": {
-                "version": "1.0",
-                "queryDate": "2013-06-03T19:56:21.381+0000",
-                "startDate": "2013-06-03T19:41:00.000+0000",
-                "statistic": "Average",
-                "period": 300,
-                "recentDatapoints": [
-                    67,
-                    30
-                ],
-                "threshold": 50
-            }
-        },
-        "newState": {
-            "stateValue": "ALARM",
-            "stateReason": "Threshold Crossed: 2 datapoints were greater than or equal to the threshold (50.0). The most recent datapoints: [55.0, 55.0].",
-            "stateReasonData": {
-                "version": "1.0",
-                "queryDate": "2013-06-10T15:56:21.392+0000",
-                "startDate": "2013-06-10T15:41:00.000+0000",
-                "statistic": "Average",
-                "period": 300,
-                "recentDatapoints": [
-                    55,
-                    55
-                ],
-                "threshold": 50
-            }
-        }
-    },
-    "HistorySummary": "Alarm updated from OK to ALARM"
-}
-*/
 
 /*
 "Timestamp" : "2013-06-21T17:17:26.932Z",

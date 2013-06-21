@@ -3,7 +3,7 @@ var express = require('express'),
 	querystring = require('querystring'),
 	https = require('https'),
     fs = require('fs');
-var redis = require("redis").createClient();
+//var redis = require("redis").createClient();
 
 //var aws = require('aws-sdk'), 
 //    SNSClient = require('aws-snsclient');

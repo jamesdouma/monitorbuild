@@ -107,7 +107,10 @@ app.post('/aws-snsclient', function(req, res) {
 //	        	if (obj["Subject"] == "OK: \"Production Done Overloaded\" in US - N. Virginia") {
     		    	console.log("PARSING MESSAGE:");
 	        		var msg = obj["Message"];
+    		    	console.log(msg);
 	        		if (typeof(msg)!="undefined") {
+	        			msg = JSON.parse( msg )
+    
 				       	for (key in msg) {console.log("MSG:"+key +" = "+msg[key]);}
 
 	        			var alarm = msg["AlarmName"];

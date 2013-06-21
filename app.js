@@ -35,7 +35,19 @@ app.get('/', function (req, res) {
 
 app.post('/aws-snsclient', function(req, res) {
 	console.log("Processing AWS SNS POST");
-  /*
+  
+    var data = '';
+    var obj = null;
+    req.addListener('data', function(chunk) { console.log("chunk:"+chunk); data += chunk; });
+    req.addListener('end', function() {
+    	console.log("PARSING:");
+        console.log( "data:"+data );
+        obj = JSON.parse( data )
+        if (null!=obj) {
+        	for (key in obj) {console.log("key:"+key +" = "+obj[key]);}
+
+
+/*
   {
   "Type" : "SubscriptionConfirmation",
   "MessageId" : "165545c9-2a5c-472c-8df2-7ff2be2b3b1b",
@@ -49,38 +61,61 @@ app.post('/aws-snsclient', function(req, res) {
   "SigningCertURL" : "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem"
   }
   */
-    //parse
- // parses the request url
- //   console.log(req.body);
-    var data = '';
-    var obj = null;
-    req.addListener('data', function(chunk) { console.log("chunk:"+chunk); data += chunk; });
-    req.addListener('end', function() {
-    	console.log("PARSING:");
-        console.log( "data:"+data );
-        obj = JSON.parse( data )
-//        res.writeHead(200, {'content-type': 'text/plain' });
-        if (obj!=null) {
-        	for (key in obj) {console.log("key:"+key +" = "+obj[key]);}
-			var url = obj["SubscribeURL"].substring(8);
-			var urlhost = url.substring(0,url.indexOf("/"));
-			var urlpath = url.substring(url.indexOf("/"));
+  			var type = obj["Type"] || "";
+        	if (type == "SubscriptionConfirmation") {	
 
-			console.log("URL:"+url);
-			console.log("HOST:"+urlhost);
-			console.log("PATH:"+urlpath);
+				var url = obj["SubscribeURL"];
+				url = (typeof(url)=="undefined")?"":url.substring(8);
+				var urlhost = url.substring(0,url.indexOf("/"));
+				var urlpath = url.substring(url.indexOf("/"));
 
-			var options = {
-			  host: urlhost,
-			  port: 443,
-			  path: urlpath
-			};
+				console.log("URL:"+url);
+				console.log("HOST:"+urlhost);
+				console.log("PATH:"+urlpath);
 
-			https.get(options, function(res) {
-			  console.log("Got response: " + res.statusCode);
-			}).on('error', function(e) {
-			  console.log("Got error: " + e.message);
-			});
+				var options = {
+				  host: urlhost,
+				  port: 443,
+				  path: urlpath
+				};
+
+				https.get(options, function(res) {
+				  console.log("Got response: " + res.statusCode);
+				}).on('error', function(e) {
+				  console.log("Got error: " + e.message);
+				});
+			}
+
+/*
+{
+  "Type" : "Notification",
+  "MessageId" : "22b80b92-fdea-4c2c-8f9d-bdfb0c7bf324",
+  "TopicArn" : "arn:aws:sns:us-east-1:123456789012:MyTopic",
+  "Subject" : "My First Message",
+  "Message" : "Hello world!",
+  "Timestamp" : "2012-05-02T00:54:06.655Z",
+  "SignatureVersion" : "1",
+  "Signature" : "EXAMPLEw6JRNwm1LFQL4ICB0bnXrdB8ClRMTQFGBqwLpGbM78tJ4etTwC5zU7O3tS6tGpey3ejedNdOJ+1fkIp9F2/LmNVKb5aFlYq+9rk9ZiPph5YlLmWsDcyC5T+Sy9/umic5S0UQc2PEtgdpVBahwNOdMW4JPwk0kAJJztnc=",
+  "SigningCertURL" : "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem",
+  "UnsubscribeURL" : "https://sns.us-east-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-east-1:123456789012:MyTopic:c9135db0-26c4-47ec-8998-413945fb5a96"
+  }
+*/
+
+        	if (obj["Type"] == "Notification") {
+        		// Metric Name
+	        	if (obj["Subject"] == "OK: \"Production Done Overloaded\" in US - N. Virginia") {
+	        		var msg = obj["Message"];
+	        		if (null != msg) {
+	        			var alarm = msg["AlarmName"];
+	        			if (null != alarm) {
+	        				if (alarm == "Production Done Overloaded") {
+
+	        				}
+	        			}
+	        		}
+	        	}
+        	}
+
 	    } else {
 	    	console.log("could not parse" + data);
 	    }
@@ -89,22 +124,6 @@ app.post('/aws-snsclient', function(req, res) {
 
     });
 
-/*
-    var theUrl = url.parse( req.url );
-    // gets the query part of the URL and parses it creating an object
-    var queryObj = querystring.parse( theUrl.query );
-
-    // queryObj will contain the data of the query as an object
-    // and jsonData will be a property of it
-    // so, using JSON.parse will parse the jsonData to create an object
-    console.log(queryObj.jsonData);
-    var obj = JSON.parse( queryObj.jsonData );
-    var obj = JSON.parse( req.body );
-
-    // as the object is created, the live below will print "bar"
-    console.log( obj );
-
-*/
 
 });
 
@@ -116,3 +135,88 @@ var port = process.env.PORT || 3000;
 app.listen(port, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
+
+/*
+{
+    "Timestamp": "2013-06-10T15:56:21.411Z",
+    "HistoryItemType": "StateUpdate",
+    "AlarmName": "Ios Queue Overloaded",
+    "HistoryData": {
+        "version": "1.0",
+        "oldState": {
+            "stateValue": "OK",
+            "stateReason": "Threshold Crossed: 1 datapoint (30.0) was not greater than or equal to the threshold (50.0).",
+            "stateReasonData": {
+                "version": "1.0",
+                "queryDate": "2013-06-03T19:56:21.381+0000",
+                "startDate": "2013-06-03T19:41:00.000+0000",
+                "statistic": "Average",
+                "period": 300,
+                "recentDatapoints": [
+                    67,
+                    30
+                ],
+                "threshold": 50
+            }
+        },
+        "newState": {
+            "stateValue": "ALARM",
+            "stateReason": "Threshold Crossed: 2 datapoints were greater than or equal to the threshold (50.0). The most recent datapoints: [55.0, 55.0].",
+            "stateReasonData": {
+                "version": "1.0",
+                "queryDate": "2013-06-10T15:56:21.392+0000",
+                "startDate": "2013-06-10T15:41:00.000+0000",
+                "statistic": "Average",
+                "period": 300,
+                "recentDatapoints": [
+                    55,
+                    55
+                ],
+                "threshold": 50
+            }
+        }
+    },
+    "HistorySummary": "Alarm updated from OK to ALARM"
+}
+*/
+
+/*
+"Timestamp" : "2013-06-21T17:17:26.932Z",
+key:Message = {"AlarmName":"Production Done Overloaded",
+				"AlarmDescription":"Too many apps waiting for upload",
+				"AWSAccountId":"621255880182",
+				"NewStateValue":"OK",
+				"NewStateReason":"Threshold Crossed: 1 datapoint (1.0) was not greater than or equal to the threshold (50.0).",
+				"StateChangeTime":"2013-06-21T17:17:26.871+0000",
+				"Region":"US - N. Virginia",
+				"OldStateValue":"INSUFFICIENT_DATA",
+				"Trigger":{"MetricName":"ApproximateNumberOfMessagesVisible",
+							"Namespace":"AWS/SQS",
+							"Statistic":"AVERAGE",
+							"Unit":null,
+							"Dimensions":[{"name":"QueueName","value":"slicehost-production_done"}],
+							"Period":60,
+							"EvaluationPeriods":5,
+							"ComparisonOperator":"GreaterThanOrEqualToThreshold",
+							"Threshold":50.0}
+				}
+Timestamp = 2013-06-21T17:17:26.932Z
+SignatureVersion = 1
+*/
+
+/*
+Processing AWS SNS POST
+chunk:{
+chunk:ximateNumberOfMessagesVisible\",\"Namespace\":\"AWS/SQS\",\"Statistic\":\"AVERAGE\",\"Unit\":null,\"Dimensions\":[{\"name\":\"QueueName\",\"value\":\"slicehost-production_done\"}],\"Period\":60,\"EvaluationPeriods\":5,\"ComparisonOperator\":\"GreaterThanOrEqualToThreshold\",\"Threshold\":50.0}}",
+   "MessageId" : "f8846f54-a4e7-5215-b505-256a28015368",
+   "SigningCertURL" : "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem",
+   "Type" : "Notification",
+   "Signature" : "sldF/kJGP95Pxt+4hvBnMAy736s2HFHSR7mfxamLIYsZyV8LtorqRUdu4yEVJb33yRHL6BTfxDv/xxJe/ruwBQkGg9gjEWFo77Isv4GkUYqMSRvi2C3Z9SmL7ZBx2hefZhCd8MtUJWEBH/lRTKhOHymyd5g672PNp6bzCH+JtfM=",
+   "UnsubscribeURL" : "https://sns.us-east-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-east-1:621255880182:Queue-Overloaded:515aba4f-e552-40e6-b6bb-562d4c24660c"
+   "SignatureVersion" : "1",
+   "Subject" : "OK: \"Production Done Overloaded\" in US - N. Virginia",
+   "Type" : "Notification",
+ }
+*/
+
+

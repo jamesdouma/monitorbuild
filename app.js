@@ -45,8 +45,37 @@ app.post('/aws-snsclient', function(req, res) {
         obj = JSON.parse( data )
         if (null!=obj) {
         	for (key in obj) {console.log("key:"+key +" = "+obj[key]);}
+  			var type = obj["Type"] || "";
 
 
+        	if (type == "SubscriptionConfirmation") {	
+        		handleSubscriptionConfirmation(obj);
+			}
+
+        	if (type == "Notification") {
+        		handleNotification(obj);
+        	}
+
+	    } else {
+	    	console.log("could not parse" + data);
+	    }
+		res.send([{name:'alarm1'}, {name:'alarm2'}]);
+    	res.end();
+
+    });
+
+});
+
+app.get('/aws-snsclient/:id', function(req, res) {
+    res.send({id:req.params.id, name: "The Name", description: "description"});
+});
+
+var port = process.env.PORT || 3000;
+app.listen(port, function(){
+  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+});
+
+function handleSubscriptionConfirmation(obj) {
 /*
   {
   "Type" : "SubscriptionConfirmation",
@@ -61,30 +90,63 @@ app.post('/aws-snsclient', function(req, res) {
   "SigningCertURL" : "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem"
   }
   */
-  			var type = obj["Type"] || "";
-        	if (type == "SubscriptionConfirmation") {	
 
-				var url = obj["SubscribeURL"];
-				url = (typeof(url)=="undefined")?"":url.substring(8);
-				var urlhost = url.substring(0,url.indexOf("/"));
-				var urlpath = url.substring(url.indexOf("/"));
+	var url = obj["SubscribeURL"];
+	url = (typeof(url)=="undefined")?"":url.substring(8);
+	var urlhost = url.substring(0,url.indexOf("/"));
+	var urlpath = url.substring(url.indexOf("/"));
 
-				console.log("URL:"+url);
-				console.log("HOST:"+urlhost);
-				console.log("PATH:"+urlpath);
+	console.log("URL:"+url);
+	console.log("HOST:"+urlhost);
+	console.log("PATH:"+urlpath);
 
-				var options = {
-				  host: urlhost,
-				  port: 443,
-				  path: urlpath
-				};
+	var options = {
+	  host: urlhost,
+	  port: 443,
+	  path: urlpath
+	};
 
-				https.get(options, function(res) {
-				  console.log("Got response: " + res.statusCode);
-				}).on('error', function(e) {
-				  console.log("Got error: " + e.message);
-				});
+	https.get(options, function(res) {
+	  console.log("Got response: " + res.statusCode);
+	}).on('error', function(e) {
+	  console.log("Got error: " + e.message);
+	});
+
+}
+
+
+function handleNotification(obj) {
+	console.log("NOTIFICATION");
+	var msg = obj["Message"];
+	console.log(msg);
+	if (typeof(msg)!="undefined") {
+    	console.log("PARSING MESSAGE:");
+		msg = JSON.parse( msg );
+
+       	for (key in msg) {console.log("MSG:"+key +" = "+msg[key]);}
+
+		var alarm = msg["AlarmName"];
+		if (null != alarm) {
+			//Monitor-Test
+			//Ios Queue Overloaded
+			//Production Done Overloaded
+			//Error Queue Overloaded
+			if (alarm == "Monitor-Test") {
+
 			}
+			if (alarm == "Production Done Overloaded") {
+
+			}
+			if (alarm == "Error Queue Overloaded") {
+
+			}
+			if (alarm == "Ios Queue Overloaded") {
+
+			}
+		}
+	}
+}
+
 
 /*
 {
@@ -100,48 +162,6 @@ app.post('/aws-snsclient', function(req, res) {
   "UnsubscribeURL" : "https://sns.us-east-1.amazonaws.com/?Action=Unsubscribe&SubscriptionArn=arn:aws:sns:us-east-1:123456789012:MyTopic:c9135db0-26c4-47ec-8998-413945fb5a96"
   }
 */
-
-        	if (type == "Notification") {
-		    	console.log("NOTIFICATION");
-        		// Metric Name
-//	        	if (obj["Subject"] == "OK: \"Production Done Overloaded\" in US - N. Virginia") {
-    		    	console.log("PARSING MESSAGE:");
-	        		var msg = obj["Message"];
-    		    	console.log(msg);
-	        		if (typeof(msg)!="undefined") {
-	        			msg = JSON.parse( msg )
-    
-				       	for (key in msg) {console.log("MSG:"+key +" = "+msg[key]);}
-
-	        			var alarm = msg["AlarmName"];
-	        			if (null != alarm) {
-	        				if (alarm == "Production Done Overloaded") {
-
-	        				}
-	        			}
-	        		}
-//	        	}
-        	}
-
-	    } else {
-	    	console.log("could not parse" + data);
-	    }
-	res.send([{name:'alarm1'}, {name:'alarm2'}]);
-    res.end()
-
-    });
-
-
-});
-
-app.get('/aws-snsclient/:id', function(req, res) {
-    res.send({id:req.params.id, name: "The Name", description: "description"});
-});
-
-var port = process.env.PORT || 3000;
-app.listen(port, function(){
-  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-});
 
 /*
 {
@@ -225,5 +245,43 @@ chunk:ximateNumberOfMessagesVisible\",\"Namespace\":\"AWS/SQS\",\"Statistic\":\"
    "Type" : "Notification",
  }
 */
+
+/*
+2013-06-21T19:08:27.805104+00:00 app[web.1]: NOTIFICATION
+PARSING MESSAGE:
+MSG:AlarmName = Monitor-Test
+MSG:AlarmDescription = Monitor-Test
+MSG:AWSAccountId = 621255880182
+MSG:NewStateValue = INSUFFICIENT_DATA
+MSG:NewStateReason = Insufficient Data: 1 datapoint was unknown.
+MSG:StateChangeTime = 2013-06-21T19:08:27.647+0000
+MSG:Region = US - N. Virginia
+MSG:OldStateValue = ALARM
+MSG:Trigger = [object Object]
+
+
+2013-06-21T19:08:27.803129+00:00 app[web.1]:   "Signature" : "HP0mpVOgo+WLsjbU4E9EyC+0Vf+X6qqn0jBVlkuAGrElgyVhb4kCvwDnoif4ZQeblBHpE9qZN6QnblsYXk3h4tpxGsYLC+L/n58nRd9wu7FWqox+Jg6wh7aORdh7s0bJF1daRBX4IRxXRUfqFP7DMblv54p6ZlFW8IZASLcyqPw=",
+2013-06-21T19:08:27.803129+00:00 app[web.1]:   "SigningCertURL" : "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-f3ecfb7224c7233fe7bb5f59f96de52f.pem",
+
+Message = {"AlarmName":"Monitor-Test",
+			"AlarmDescription":"Monitor-Test",
+			"AWSAccountId":"621255880182",
+			"NewStateValue":"INSUFFICIENT_DATA",
+			"NewStateReason":"Insufficient Data: 1 datapoint was unknown.",
+			"StateChangeTime":"2013-06-21T19:08:27.647+0000",
+			"Region":"US - N. Virginia",
+			"OldStateValue":"ALARM",
+			"Trigger":{"MetricName":"RequestCount",
+						"Namespace":"AWS/ELB",
+						"Statistic":"SUM",
+						"Unit":null,
+						"Dimensions":[{"name":"LoadBalancerName","value":"staging"}],
+						"Period":300,
+						"EvaluationPeriods":1,
+						"ComparisonOperator":"GreaterThanOrEqualToThreshold",
+						"Threshold":1.0}
+			}
+*/
+
 
 

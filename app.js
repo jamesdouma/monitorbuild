@@ -30,6 +30,8 @@ app.configure(function(){
 //app.post('/receive', client);
 
 app.get('/', function (req, res) {
+    console.log('Version: ' + process.version);
+	
     res.sendfile(__dirname + '/public/index.html');
 });
 
@@ -173,6 +175,7 @@ function handleNotification(obj) {
 
 function monitorTest(msg) {
     console.log("MONITOR TEST:");
+    console.log('Version: ' + process.version);
     //"NewStateValue":"OK"
     //"NewStateValue":"ALARM"
     //"NewStateValue":"INSUFFICIENT_DATA"

@@ -2,7 +2,8 @@ var express = require('express'),
 	url = require('url'),
 	querystring = require('querystring'),
 	https = require('https'),
-    fs = require('fs');
+    fs = require('fs'),
+    nconf = require('nconf');
 //var redis = require("redis").createClient();
 
 //var aws = require('aws-sdk'), 
@@ -31,7 +32,7 @@ app.configure(function(){
 
 app.get('/', function (req, res) {
     console.log('Version: ' + process.version);
-	
+
     res.sendfile(__dirname + '/public/index.html');
 });
 
@@ -191,15 +192,87 @@ function monitorTest(msg) {
 }
 
 function productionDoneOverloaded(msg) {
+    console.log("productionDoneOverloaded");
 	
 }
 
 function errorQueueOverloaded(msg) {
-	
+	console.log("errorQueueOverloaded");
 }
 
-function IosQueueOverloaded(msg) {
-	
+function iosQueueOverloaded(msg) {
+	console.log("iosQueueOverloaded");
+/*
+{
+    "Timestamp": "2013-08-14T16:21:21.426Z",
+    "HistoryItemType": "Action",
+    "AlarmName": "Ios Queue Overloaded",
+    "HistoryData": {
+        "actionState": "Succeeded",
+        "notificationResource": "arn:aws:sns:us-east-1:621255880182:Queue-Overloaded",
+        "stateUpdateTimestamp": "2013-08-14T16:21:21.408+0000",
+        "publishedMessage": {
+            "default": {
+                "AlarmName": "Ios Queue Overloaded",
+                "AlarmDescription": "there are too many messages - apps aren't being processed",
+                "AWSAccountId": "621255880182",
+                "NewStateValue": "OK",
+                "NewStateReason": "Threshold Crossed: 1 datapoint (48.0) was not greater than or equal to the threshold (50.0).",
+                "StateChangeTime": "2013-08-14T16:21:21.408+0000",
+                "Region": "US - N. Virginia",
+                "OldStateValue": "ALARM",
+                "Trigger": {
+                    "MetricName": "ApproximateNumberOfMessagesVisible",
+                    "Namespace": "AWS/SQS",
+                    "Statistic": "AVERAGE",
+                    "Unit": null,
+                    "Dimensions": [
+                        {
+                            "name": "QueueName",
+                            "value": "ios_slicehost-production_todo"
+                        }
+                    ],
+                    "Period": 300,
+                    "EvaluationPeriods": 2,
+                    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+                    "Threshold": 50
+                }
+            },
+            "sms": "OK: \"Ios Queue Overloaded\" in US - N. Virginia",
+            "email": "You are receiving this email because your Amazon CloudWatch Alarm \"Ios Queue Overloaded\" in the US - N. Virginia region has entered the OK state, because \"Threshold Crossed: 1 datapoint (48.0) was not greater than or equal to the threshold (50.0).\" at \"Wednesday 14 August, 2013 16:21:21 UTC\".\n\nView this alarm in the AWS Management Console:\nhttps://console.aws.amazon.com/cloudwatch/home?region=us-east-1#s=Alarms&alarm=Ios%20Queue%20Overloaded\n\nAlarm Details:\n- Name:                       Ios Queue Overloaded\n- Description:                there are too many messages - apps aren't being processed\n- State Change:               ALARM -> OK\n- Reason for State Change:    Threshold Crossed: 1 datapoint (48.0) was not greater than or equal to the threshold (50.0).\n- Timestamp:                  Wednesday 14 August, 2013 16:21:21 UTC\n- AWS Account:                621255880182\n\nThreshold:\n- The alarm is in the ALARM state when the metric is GreaterThanOrEqualToThreshold 50.0 for 300 seconds. \n\nMonitored Metric:\n- MetricNamespace:            AWS/SQS\n- MetricName:                 ApproximateNumberOfMessagesVisible\n- Dimensions:                 [QueueName = ios_slicehost-production_todo]\n- Period:                     300 seconds\n- Statistic:                  Average\n- Unit:                       not specified\n\nState Change Actions:\n- OK: [arn:aws:sns:us-east-1:621255880182:Queue-Overloaded]\n- ALARM: \n- INSUFFICIENT_DATA: \n"
+        }
+    },
+    "HistorySummary": "Successfully executed action arn:aws:sns:us-east-1:621255880182:Queue-Overloaded"
+}
+*/
+}
+
+function androidQueueOverloaded(msg) {
+	console.log("androidQueueOverloaded");
+}
+
+function bbWidgetQueueOverloaded(msg) {
+
+}
+
+function numberOfMessagesReceived(msg) {
+
+}
+
+function symbianQueueOverloaded(msg) {
+
+}
+
+function winphoneQueueOverloaded(msg) {
+
+}
+
+function webosQueueOverloaded(msg) {
+
+}
+
+function unhealthyHosts(msg) {
+
 }
 
 /*
